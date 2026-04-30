@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TITAN | Premium Freelance Project</title>
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;700;900&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --primary: #6366f1; /* Indigo Modern */
+            --bg: #0f172a;
+            --card-bg: #1e293b;
+            --text: #f8fafc;
+            --glass: rgba(255, 255, 255, 0.05);
+        }
+
+        [data-theme="light"] {
+            --bg: #f1f5f9;
+            --card-bg: #ffffff;
+            --text: #0f172a;
+            --glass: rgba(0, 0, 0, 0.05);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+        body { background: var(--bg); color: var(--text); font-family: 'Outfit', sans-serif; overflow-x: hidden; }
+
+        /* --- Header & Nav --- */
+        header {
+            position: fixed; top: 0; width: 100%; z-index: 1000;
+            backdrop-filter: blur(15px); border-bottom: 1px solid var(--glass);
+        }
+        nav {
+            max-width: 1300px; margin: 0 auto; padding: 15px 20px;
+            display: flex; justify-content: space-between; align-items: center;
+        }
+        .logo { font-size: 1.5rem; font-weight: 900; letter-spacing: -1px; display: flex; align-items: center; gap: 8px; }
+        .logo i { color: var(--primary); }
+
+        .nav-tools { display: flex; align-items: center; gap: 20px; }
+        .theme-toggle, .cart-icon { cursor: pointer; font-size: 1.2rem; position: relative; }
+        .cart-count { 
+            position: absolute; top: -8px; right: -10px; background: var(--primary);
+            color: white; font-size: 10px; padding: 2px 6px; border-radius: 50%;
+        }
+
+        /* --- Hero Section --- */
+        .hero {
+            height: 90vh; display: flex; flex-direction: column; justify-content: center;
+            align-items: center; text-align: center; padding: 0 20px;
+            background: radial-gradient(circle at 50% 50%, rgba(99, 102, 241, 0.15) 0%, transparent 50%);
+        }
+        .hero h1 { font-size: clamp(2.5rem, 10vw, 5.5rem); font-weight: 900; line-height: 1; margin-bottom: 20px; }
+        .hero span { color: var(--primary); }
+        .hero p { max-width: 600px; opacity: 0.7; margin-bottom: 30px; font-size: 1.1rem; }
+
+        /* --- Filter System --- */
+        .filter-container {
+            max-width: 1300px; margin: 0 auto 40px; padding: 0 20px;
+            display: flex; justify-content: center; gap: 15px; flex-wrap: wrap;
+        }
+        .filter-btn {
+            padding: 10px 25px; border-radius: 50px; border: 1px solid var(--glass);
+            background: var(--card-bg); color: var(--text); cursor: pointer; font-weight: 600;
+        }
+        .filter-btn.active { background: var(--primary); color: white; border-color: var(--primary); }
+
+        /* --- Grid System --- */
+        .shop-container {
+            max-width: 1300px; margin: 0 auto; padding: 0 20px 100px;
+            display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 30px;
+        }
+
+        .product-card {
+            background: var(--card-bg); border-radius: 24px; padding: 20px;
+            border: 1px solid var(--glass); position: relative; overflow: hidden;
+        }
+        .product-card:hover { transform: translateY(-10px); border-color: var(--primary); box-shadow: 0 20px 40px rgba(0,0,0,0.2); }
+
+        .img-container {
+            width: 100%; height: 220px; background: var(--bg); border-radius: 18px;
+            margin-bottom: 20px; overflow: hidden; display: flex; align-items: center; justify-content: center;
+        }
+        .img-container img { max-width: 80%; transition: 0.5s; }
+        .product-card:hover img { transform: scale(1.1) rotate(5deg); }
+
+        .tag { font-size: 10px; font-weight: 900; background: var(--primary); color: white; padding: 4px 10px; border-radius: 4px; display: inline-block; margin-bottom: 10px; }
+        
+        .info h3 { font-size: 1.2rem; margin-bottom: 10px; font-weight: 700; }
+        .price-row { display: flex; justify-content: space-between; align-items: center; }
+        .price { font-size: 1.4rem; font-weight: 900; color: var(--primary); }
+        
+        .add-btn {
+            width: 40px; height: 40px; border-radius: 12px; background: var(--text);
+            color: var(--bg); border: none; cursor: pointer; display: flex; justify-content: center; align-items: center;
+        }
+        .add-btn:hover { background: var(--primary); color: white; }
+
+        /* --- Footer --- */
+        footer { padding: 60px 20px; border-top: 1px solid var(--glass); text-align: center; opacity: 0.6; font-size: 14px; }
+
+        /* --- Mobile View Adjustments --- */
+        @media (max-width: 768px) {
+            .shop-container { grid-template-columns: repeat(2, 1fr); gap: 15px; padding: 10px; }
+            .product-card { padding: 12px; border-radius: 16px; }
+            .img-container { height: 150px; }
+            .hero h1 { font-size: 3rem; }
+            .filter-btn { padding: 8px 15px; font-size: 12px; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <nav>
+            <div class="logo"><i class="fas fa-cube"></i> TITAN</div>
+            <div class="nav-tools">
+                <div class="theme-toggle" id="themeBtn"><i class="fas fa-moon"></i></div>
+                <div class="cart-icon">
+                    <i class="fas fa-shopping-cart"></i>
+                    <span class="cart-count" id="cartCount">0</span>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <section class="hero">
+            <p style="font-weight: 700; letter-spacing: 2px;">COLLECTION 2026</p>
+            <h1>FUTURE <span>GADGETS</span> <br> FOR TITANS.</h1>
+            <p>Elevate your lifestyle with the most sophisticated tech stack ever assembled. Precision engineered for the bold.</p>
+        </section>
+
+        <div class="filter-container">
+            <button class="filter-btn active" onclick="filterItems('all')">All Tech</button>
+            <button class="filter-btn" onclick="filterItems('audio')">Audio</button>
+            <button class="filter-btn" onclick="filterItems('wearable')">Wearable</button>
+            <button class="filter-btn" onclick="filterItems('gaming')">Gaming</button>
+        </div>
+
+        <div class="shop-container" id="productGrid">
+            </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2026 TITAN GADGETS. DEVELOPED BY [Your Name]</p>
+        <p style="margin-top: 10px;">Modern HTML5 + CSS3 + Vanilla JavaScript</p>
+    </footer>
+
+    <script>
+        const products = [
+            { id: 1, name: "Neural Pods", price: 199, cat: "audio", img: "https://images.unsplash.com/photo-1590658268037-6bf12165a8df?q=80&w=400" },
+            { id: 2, name: "Titan Watch V2", price: 499, cat: "wearable", img: "https://images.unsplash.com/photo-1523275335684-37898b6baf30?q=80&w=400" },
+            { id: 3, name: "Cyber Pad S", price: 89, cat: "gaming", img: "https://images.unsplash.com/photo-1527698266440-12104a498b76?q=80&w=400" },
+            { id: 4, name: "Horizon Glass", price: 1500, cat: "wearable", img: "https://images.unsplash.com/photo-1592477976530-647821522f4b?q=80&w=400" },
+            { id: 5, name: "Aura Headset", price: 350, cat: "audio", img: "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?q=80&w=400" },
+            { id: 6, name: "Mechanical Core", price: 175, cat: "gaming", img: "https://images.unsplash.com/photo-1511467687858-23d96c32e4ae?q=80&w=400" },
+            { id: 7, name: "Nova Drone", price: 950, cat: "gaming", img: "https://images.unsplash.com/photo-1507582020474-9a35b7d455d9?q=80&w=400" },
+            { id: 8, name: "Sonic Earbuds", price: 120, cat: "audio", img: "https://images.unsplash.com/photo-1572569511254-d8f925fe2cbb?q=80&w=400" },
+            { id: 9, name: "Smart Ring R1", price: 299, cat: "wearable", img: "https://images.unsplash.com/photo-1616119138234-487c6702221c?q=80&w=400" },
+            { id: 10, name: "Retro Console", price: 199, cat: "gaming", img: "https://images.unsplash.com/photo-1550745165-9bc0b252726f?q=80&w=400" },
+            { id: 11, name: "Studio Mic", price: 250, cat: "audio", img: "https://images.unsplash.com/photo-1590602847861-f357a9332bbc?q=80&w=400" },
+            { id: 12, name: "Smart Scale", price: 60, cat: "wearable", img: "https://images.unsplash.com/photo-1515023115689-585010d67ee4?q=80&w=400" }
+        ];
+
+        let cart = 0;
+        const grid = document.getElementById('productGrid');
+        const cartCount = document.getElementById('cartCount');
+        const themeBtn = document.getElementById('themeBtn');
+
+        // Theme Toggle Logic
+        themeBtn.addEventListener('click', () => {
+            const currentTheme = document.body.getAttribute('data-theme');
+            if(currentTheme === 'light') {
+                document.body.removeAttribute('data-theme');
+                themeBtn.innerHTML = '<i class="fas fa-moon"></i>';
+            } else {
+                document.body.setAttribute('data-theme', 'light');
+                themeBtn.innerHTML = '<i class="fas fa-sun"></i>';
+            }
+        });
+
+        // Filter & Render Logic
+        function renderProducts(items) {
+            grid.innerHTML = '';
+            items.forEach(p => {
+                const card = document.createElement('div');
+                card.className = 'product-card';
+                card.innerHTML = `
+                    <span class="tag">${p.cat.toUpperCase()}</span>
+                    <div class="img-container">
+                        <img src="${p.img}" alt="${p.name}">
+                    </div>
+                    <div class="info">
+                        <h3>${p.name}</h3>
+                        <div class="price-row">
+                            <span class="price">$${p.price}</span>
+                            <button class="add-btn" onclick="updateCart()"><i class="fas fa-plus"></i></button>
+                        </div>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        function filterItems(cat) {
+            // Update UI buttons
+            document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+
+            if(cat === 'all') {
+                renderProducts(products);
+            } else {
+                const filtered = products.filter(p => p.cat === cat);
+                renderProducts(filtered);
+            }
+        }
+
+        function updateCart() {
+            cart++;
+            cartCount.innerText = cart;
+            // Add a small scale animation to cart icon
+            document.querySelector('.cart-icon').style.transform = 'scale(1.2)';
+            setTimeout(() => {
+                document.querySelector('.cart-icon').style.transform = 'scale(1)';
+            }, 200);
+        }
+
+        // Initial Render
+        renderProducts(products);
+    </script>
+</body>
+</html>
